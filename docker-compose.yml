@@ -1,0 +1,32 @@
+version: "3.7"
+services:
+  facedet:
+    image: codait/max-facial-recognizer
+    ports:
+      - 5001:5000
+    networks:
+      - net
+
+  objdet:
+    image: codait/max-object-detector
+    ports:
+      - 5002:5000
+    networks:
+      - net
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    depends_on:
+      - facedet
+      - objdet
+    volumes:
+      - ./train:/app/train
+    networks:
+      - net
+
+volumes:
+  train:
+
+networks:
+  net:
